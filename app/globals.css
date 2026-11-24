@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* The Minecraft-style font. The file lives in public/fonts. */
+@font-face {
+  font-family: "Monocraft";
+  src: url("/fonts/Monocraft.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --background: #07080c;
+  --foreground: #e8eaf0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  /* If the font file is missing, the browser uses a plain monospace font */
+  font-family: "Monocraft", ui-monospace, Consolas, monospace;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Soft atmospheric lighting behind the whole site */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60rem 30rem at 50% -10%, rgba(99, 102, 241, 0.22), transparent 70%),
+    radial-gradient(40rem 25rem at 90% 20%, rgba(168, 85, 247, 0.12), transparent 70%),
+    radial-gradient(40rem 25rem at 5% 60%, rgba(56, 189, 248, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+/* Reusable frosted-glass look. We use it on cards later. */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Shine that sweeps across the rank ribbons.
+   --shine controls how bright the streak is (0 to 1). */
+.ribbon-shine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, var(--shine, 0.5)) 50%,
+    transparent 100%
+  );
+  transform: translateX(-160%) skewX(-20deg);
+  animation: ribbon-shine 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ribbon-shine {
+  0% {
+    transform: translateX(-160%) skewX(-20deg);
+  }
+  55%,
+  100% {
+    transform: translateX(380%) skewX(-20deg);
+  }
+}
+
+/* Visitors who asked their computer for less motion get no animation */
+@media (prefers-reduced-motion: reduce) {
+  .ribbon-shine {
+    animation: none;
+  }
+}
